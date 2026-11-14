@@ -1,0 +1,25 @@
+name: Kiosk Puck Bridge
+version: "0.3.0"
+slug: kiosk_puck_bridge
+description: Coordinate wake word arbitration between EchoMuse pucks and Kiosk Satellites.
+url: https://github.com/vibribbonee/kiosk-puck-bridge
+startup: application
+boot: manual
+init: false
+host_network: true
+arch:
+  - amd64
+  - aarch64
+options:
+  controller_host: "127.0.0.1"
+  controller_port: 8767
+  controller_tls_port: 8770
+  level_offset_db: -55
+  mode: "bridge"
+schema:
+  controller_host: str
+  controller_port: port
+  controller_tls_port: port
+  level_offset_db: "float(-120,0)"
+  mode: "list(observe|bridge)"
+  virtual_puck_port: "port?"
