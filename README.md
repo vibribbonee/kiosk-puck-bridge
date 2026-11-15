@@ -1,50 +1,47 @@
 # KioskMuse Bridge
 
-Share one wake word across EchoMuse pucks and Kiosk Satellites on the same network. Each system can already pick a winner among its own devices. When both systems hear the same wake word, though, each can start an Assist conversation and reply. The bridge lets them coordinate so one device answers.
-
-## Install and set up
-
-You’ll need the stock EchoMuse controller and the bridge on the same Home Assistant OS host. Enable on-device wake detection and wake arbitration in EchoMuse. On each Kiosk Satellite you want to include, turn on **Enable wake word arbitration**, use the same wake word as your EchoMuse pucks, and start with the default 400 ms Kiosk arbitration window.
+Use one wake word across EchoMuse pucks and Kiosk Satellites. When both hear you, the bridge helps choose which device should answer.
 
 [![Add the KioskMuse Bridge repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvibribbonee%2Fkiosk-puck-bridge)
 
-1. Open the button above and confirm adding the repository in Home Assistant.
-2. Install and start **KioskMuse Bridge**.
-3. In the EchoMuse dashboard, approve the single pending device named `KIOSK-…`. The bridge discovers your Kiosks automatically. When the connection is ready, the app log says **Virtual puck is ready to arbitrate**.
-
-To add the repository manually, open **Settings → Apps → Install app → ⋮ → Repositories** and enter `https://github.com/vibribbonee/kiosk-puck-bridge`.
-
-In **Settings → Devices & services**, choose **Ignore** for the virtual puck’s **Bridge Voice Assistant** and **Bridge BT Proxy** ESPHome discoveries. The bridge uses the Voice Assistant connection itself. Keep the integrations for your physical pucks and satellites.
-
-![Illustration of the two Bridge ESPHome cards, each with Ignore selected](docs/ignore-bridge-discovery.png)
-
-If you already added the virtual Voice Assistant to Home Assistant, disable that virtual ESPHome entry so the bridge can connect.
-
-## Test and tune
-
-Say the wake word and a short question near each device. Check that only the expected device replies. If one side wins too often, open **KioskMuse Bridge → Configuration** and adjust `level_offset_db` in 5 dB steps, then restart the app and test again. The running bridge reads these Home Assistant app options at startup. To fine-tune one Kiosk without restarting the bridge, use that Kiosk’s own Arbitration offset.
-
-| If this happens | Change the offset |
-| --- | --- |
-| A Kiosk wins when you’re beside an EchoMuse puck | Lower it, for example from `-55` to `-60` |
-| An EchoMuse puck wins when you’re beside a Kiosk | Raise it, for example from `-55` to `-50` |
-
-Use the bridge offset when the whole Kiosk group tends to win or lose. If one Kiosk is the outlier, adjust **Arbitration offset** on that device under **Voice Satellite → Wake Word → Wake Word Arbitration**. Raising it gives that Kiosk a stronger vote both against other Kiosks and through the bridge. Lowering it gives that Kiosk a weaker vote. [Kiosk Satellite settings](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/voice-satellite.md#wake-word-arbitration)
-
-In stock EchoMuse, **Config → Wake word → Arbitration window** controls which wake detections count as the same request. Keep it above zero for devices using the bridge. Use the bridge offset or the individual Kiosk offset to balance loudness. [EchoMuse settings](https://github.com/wilbowes/EchoMuse/blob/main/docs/configuration.md#arbitration-window)
-
 ## How it works
 
-The bridge listens for Kiosk wake claims on the local network. It submits the strongest Kiosk claim to EchoMuse as one virtual puck. Kiosk reports loudness relative to its local noise floor, while EchoMuse uses dBFS. The configurable offset lets you balance those readings for your devices and room.
+```mermaid
+flowchart TD
+    K["Kiosk Satellites"] -->|Wake claims| B["KioskMuse Bridge"]
+    B -->|One virtual puck claim| E{"EchoMuse picks a winner"}
+    P["EchoMuse pucks"] -->|Wake claims| E
+    E -->|Physical puck wins| R["Bridge tells hearing Kiosks to stand down"]
+    E -->|Physical puck wins| EP["Winning EchoMuse puck"]
+    E -->|Virtual puck wins| KS["Kiosks pick their winner"]
+    KS --> KP["Winning Kiosk Satellite"]
+    EP -->|Voice request| H["Home Assistant Assist"]
+    KP -->|Voice request| H
+```
 
-If a physical puck wins, the bridge relays that result so the Kiosks can stand down. If the virtual puck wins, Kiosk Satellite’s own arbitration decides which Kiosk answers. The winning device handles its own audio and Assist pipeline. Both systems run their stock software.
+The winning device runs its normal Assist conversation and plays the answer. The bridge handles wake claims and arbitration.
 
-The bridge uses the protocols implemented by both projects today. Both devices can occasionally answer if a wake claim or the winning verdict arrives after the other device’s arbitration window. If this recurs, try a 450–500 ms window on the affected Kiosk and check the bridge logs. Test both directions after an upgrade. See the [app documentation](kiosk_puck_bridge/DOCS.md) for troubleshooting and advanced options.
+## Setup
+
+1. Run the bridge and stock EchoMuse on the same Home Assistant OS host. Enable on-device wake detection and arbitration in EchoMuse. Use the same wake word on both systems.
+2. Enable **Wake word arbitration** on each Kiosk. Start with the default **400 ms** window.
+3. Add the app repository using the button above. Start **KioskMuse Bridge**, then approve the pending `KIOSK-…` puck in **EchoMuse**. The app log says **Virtual puck is ready to arbitrate** when it can participate.
+4. In Home Assistant, choose **Ignore** for **Bridge Voice Assistant** and **Bridge BT Proxy**. If you already added the virtual Voice Assistant, disable that ESPHome entry so the bridge can connect.
+
+![The virtual Bridge Voice Assistant and Bridge BT Proxy cards with their Ignore buttons highlighted](docs/ignore-bridge-discovery.png)
+
+## Tune
+
+Try the wake word near each device. If Kiosks win too often, lower `level_offset_db` in the bridge by 5 dB. Raise it if the pucks win too often. Restart the bridge after changing its settings. For one Kiosk, use its own **Arbitration offset**.
+
+A late claim or verdict can cause two replies. If that happens regularly, try a **450–500 ms** window on the affected Kiosk and check the bridge logs.
+
+If the virtual puck shows **Waiting for HA** under **Bluetooth proxy**, [turn off its unused proxy](kiosk_puck_bridge/DOCS.md#echomuse-status).
+
+[App documentation and troubleshooting](kiosk_puck_bridge/DOCS.md)
 
 ## Contributing
 
-Pull requests are welcome! Tell us what you changed and how you tested it.
+Pull requests are welcome. Describe the change and how you tested it.
 
-## AI disclosure
-
-OpenAI Codex assisted with the bridge’s implementation, tests, and documentation. Arbitration was tested against an unmodified EchoMuse controller with simulated clients and exercised on physical devices.
+[MIT license](LICENSE). OpenAI Codex assisted with development, testing, and documentation.

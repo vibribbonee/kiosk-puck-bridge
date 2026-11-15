@@ -17,6 +17,14 @@ In **Settings → Devices & services**, choose **Ignore** for the virtual puck�
 
 If you already added the virtual Voice Assistant to Home Assistant, disable that virtual ESPHome entry so the bridge can connect.
 
+## EchoMuse status
+
+On the virtual puck’s **Status** tab, **Voice assistant → HA connected** means the bridge has connected to its voice endpoint. Check the bridge log for **Virtual puck is ready to arbitrate**.
+
+If **Bluetooth proxy → Waiting for HA** appears, the virtual puck has inherited an enabled proxy or has one enabled in its own settings. Open the virtual puck’s **Config → Bluetooth**, select **Device** scope, turn off **Bluetooth proxy**, and select **Push config**. The virtual puck has no Bluetooth radio.
+
+EchoMuse can show **Update available** for the virtual puck because it compares its bridge version to physical Echo firmware. Update KioskMuse Bridge from **Home Assistant → Settings → Apps**.
+
 ## Configuration and troubleshooting
 
 - **`level_offset_db`** adjusts how Kiosk wake levels compare with EchoMuse
