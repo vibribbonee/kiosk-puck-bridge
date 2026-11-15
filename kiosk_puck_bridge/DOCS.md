@@ -43,8 +43,3 @@ The bridge uses local UDP port 2330 for Kiosk discovery and claims.
 If both systems reply, verify that both heard the same phrase and that the
 Kiosk arbitration window is at least its 400 ms default. Late detection or
 Wi-Fi delivery can put a claim outside the arbitration window.
-
-EchoMuse pairing credentials stay in the app’s Home Assistant data
-directory. A store-installed copy has its own data and virtual puck identity.
-When migrating from a local copy, stop it before starting the store copy,
-then approve the new virtual puck in EchoMuse.

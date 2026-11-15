@@ -8,9 +8,9 @@ Use one wake word across EchoMuse pucks and Kiosk Satellites, with one device an
 
 ## Features
 
-- Find Kiosk Satellites through their existing wake arbitration.
-- Connect to stock EchoMuse as a single virtual puck.
-- Tune how Kiosk and puck microphone levels compare.
+- **One reply across both systems.** Use the same wake word on EchoMuse pucks and Kiosk Satellites.
+- **Automatic Kiosk discovery.** Approve a single virtual puck in stock EchoMuse to represent the Kiosks on your network.
+- **Adjust which device wins.** Tune microphone level offsets for the bridge or an individual Kiosk.
 
 ## How it works
 
@@ -38,18 +38,14 @@ flowchart TD
 
 1. Run the bridge and stock EchoMuse on the same Home Assistant OS host. Enable on-device wake detection and arbitration in EchoMuse. Use the same wake word on both systems.
 2. Enable **Wake word arbitration** on each Kiosk. Start with the default **400 ms** window.
-3. Add the app repository using the button above. Start **KioskMuse Bridge**, then approve the pending `KIOSK-…` puck in **EchoMuse**. The app log says **Virtual puck is ready to arbitrate** when it can participate.
-4. In Home Assistant, choose **Ignore** for **Bridge Voice Assistant** and **Bridge BT Proxy**. If you already added the virtual Voice Assistant, disable that ESPHome entry so the bridge can connect.
+3. Use the button above to add the repository. Install and start **KioskMuse Bridge** from the Home Assistant Apps store, then approve its pending `KIOSK-…` puck in **EchoMuse**.
+4. In **Settings → Devices & services**, choose **Ignore** for **Bridge Voice Assistant** and **Bridge BT Proxy** if they appear. Check the bridge log for **Virtual puck is ready to arbitrate**.
 
 ![The virtual Bridge Voice Assistant and Bridge BT Proxy cards with their Ignore buttons highlighted](docs/ignore-bridge-discovery.png)
 
 ## Tune
 
 Try the wake word near each device. If Kiosks win too often, lower `level_offset_db` in the bridge by 5 dB. Raise it if the pucks win too often. Restart the bridge after changing its settings. For one Kiosk, use its own **Arbitration offset**.
-
-A late claim or verdict can cause two replies. If that happens regularly, try a **450–500 ms** window on the affected Kiosk and check the bridge logs.
-
-If the virtual puck shows **Waiting for HA** under **Bluetooth proxy**, [turn off its unused proxy](kiosk_puck_bridge/DOCS.md#echomuse-status).
 
 [App documentation and troubleshooting](kiosk_puck_bridge/DOCS.md)
 
