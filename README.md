@@ -1,10 +1,23 @@
+<img src="kiosk_puck_bridge/icon.png" alt="" width="64" height="64" align="right">
+
 # KioskMuse Bridge
 
-Use one wake word across EchoMuse pucks and Kiosk Satellites. When both hear you, the bridge helps choose which device should answer.
+Use one wake word across EchoMuse pucks and Kiosk Satellites, with one device answering when both systems hear it.
 
 [![Add the KioskMuse Bridge repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvibribbonee%2Fkiosk-puck-bridge)
 
+## Features
+
+- Find Kiosk Satellites through their existing wake arbitration.
+- Connect to stock EchoMuse as a single virtual puck.
+- Tune how Kiosk and puck microphone levels compare.
+
 ## How it works
+
+The winning device runs its normal Assist conversation and plays the answer. The bridge handles wake claims and arbitration.
+
+<details>
+<summary>Show the wake arbitration diagram</summary>
 
 ```mermaid
 flowchart TD
@@ -19,7 +32,7 @@ flowchart TD
     KP -->|Voice request| H
 ```
 
-The winning device runs its normal Assist conversation and plays the answer. The bridge handles wake claims and arbitration.
+</details>
 
 ## Setup
 

@@ -23,7 +23,7 @@ On the virtual puck’s **Status** tab, **Voice assistant → HA connected** mea
 
 If **Bluetooth proxy → Waiting for HA** appears, the virtual puck has inherited an enabled proxy or has one enabled in its own settings. Open the virtual puck’s **Config → Bluetooth**, select **Device** scope, turn off **Bluetooth proxy**, and select **Push config**. The virtual puck has no Bluetooth radio.
 
-EchoMuse can show **Update available** for the virtual puck because it compares its bridge version to physical Echo firmware. Update KioskMuse Bridge from **Home Assistant → Settings → Apps**.
+EchoMuse can show **Update available** for the virtual puck because it compares the bridge version to physical Echo firmware. Use **Home Assistant → Settings → Apps** to update KioskMuse Bridge. The EchoMuse **Update** button attempts a physical puck firmware installation and will fail on the virtual puck.
 
 ## Configuration and troubleshooting
 
