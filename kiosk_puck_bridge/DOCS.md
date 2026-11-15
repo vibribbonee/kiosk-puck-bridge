@@ -1,6 +1,6 @@
-# Kiosk Puck Bridge
+# KioskMuse Bridge
 
-Kiosk Puck Bridge coordinates wake word arbitration between EchoMuse and Kiosk
+KioskMuse Bridge coordinates wake word arbitration between EchoMuse and Kiosk
 Satellite. See the [project README](https://github.com/vibribbonee/kiosk-puck-bridge#readme)
 for installation, setup, and an explanation of how the bridge works.
 
@@ -13,10 +13,9 @@ for installation, setup, and an explanation of how the bridge works.
 3. Start this app and approve the single `KIOSK-…` puck in EchoMuse. Wait for
    **Virtual puck is ready to arbitrate** in the app log.
 
-If Home Assistant discovers the virtual puck as an ESPHome device, leave it
-unconfigured. If it was already added, disable the virtual puck’s ESPHome
-entry so the bridge can take its connection. Keep the physical devices’
-existing integrations enabled.
+In **Settings → Devices & services**, choose **Ignore** for the virtual puck’s **Bridge Voice Assistant** and **Bridge BT Proxy** ESPHome discoveries. The bridge uses the Voice Assistant connection itself. Keep the integrations for your physical pucks and satellites.
+
+If you already added the virtual Voice Assistant to Home Assistant, disable that virtual ESPHome entry so the bridge can connect.
 
 ## Configuration and troubleshooting
 

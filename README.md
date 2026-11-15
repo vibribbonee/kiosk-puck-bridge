@@ -1,4 +1,4 @@
-# Kiosk Puck Bridge
+# KioskMuse Bridge
 
 Share one wake word across EchoMuse pucks and Kiosk Satellites on the same network. Each system can already pick a winner among its own devices. When both systems hear the same wake word, though, each can start an Assist conversation and reply. The bridge lets them coordinate so one device answers.
 
@@ -6,19 +6,23 @@ Share one wake word across EchoMuse pucks and Kiosk Satellites on the same netwo
 
 You’ll need the stock EchoMuse controller and the bridge on the same Home Assistant OS host. Enable on-device wake detection and wake arbitration in EchoMuse. On each Kiosk Satellite you want to include, turn on **Enable wake word arbitration**, use the same wake word as your EchoMuse pucks, and start with the default 400 ms Kiosk arbitration window.
 
-[![Add the Kiosk Puck Bridge repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvibribbonee%2Fkiosk-puck-bridge)
+[![Add the KioskMuse Bridge repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvibribbonee%2Fkiosk-puck-bridge)
 
 1. Open the button above and confirm adding the repository in Home Assistant.
-2. Install and start **Kiosk Puck Bridge**.
+2. Install and start **KioskMuse Bridge**.
 3. In the EchoMuse dashboard, approve the single pending device named `KIOSK-…`. The bridge discovers your Kiosks automatically. When the connection is ready, the app log says **Virtual puck is ready to arbitrate**.
 
 To add the repository manually, open **Settings → Apps → Install app → ⋮ → Repositories** and enter `https://github.com/vibribbonee/kiosk-puck-bridge`.
 
-If Home Assistant offers to add the virtual puck as an ESPHome device, leave that discovery unconfigured. The bridge uses that connection itself. Your physical devices keep their existing Assist connections.
+In **Settings → Devices & services**, choose **Ignore** for the virtual puck’s **Bridge Voice Assistant** and **Bridge BT Proxy** ESPHome discoveries. The bridge uses the Voice Assistant connection itself. Keep the integrations for your physical pucks and satellites.
+
+![Illustration of the two Bridge ESPHome cards, each with Ignore selected](docs/ignore-bridge-discovery.png)
+
+If you already added the virtual Voice Assistant to Home Assistant, disable that virtual ESPHome entry so the bridge can connect.
 
 ## Test and tune
 
-Say the wake word and a short question near each device. Check that only the expected device replies. If one side wins too often, open **Kiosk Puck Bridge → Configuration** and adjust `level_offset_db` in 5 dB steps, then restart the app and test again.
+Say the wake word and a short question near each device. Check that only the expected device replies. If one side wins too often, open **KioskMuse Bridge → Configuration** and adjust `level_offset_db` in 5 dB steps, then restart the app and test again. The running bridge reads these Home Assistant app options at startup. To fine-tune one Kiosk without restarting the bridge, use that Kiosk’s own Arbitration offset.
 
 | If this happens | Change the offset |
 | --- | --- |
@@ -35,7 +39,7 @@ The bridge listens for Kiosk wake claims on the local network. It submits the st
 
 If a physical puck wins, the bridge relays that result so the Kiosks can stand down. If the virtual puck wins, Kiosk Satellite’s own arbitration decides which Kiosk answers. The winning device handles its own audio and Assist pipeline. Both systems run their stock software.
 
-The bridge uses the protocols implemented by both projects today. A late wake claim can still cause a double response, so test both directions after an upgrade. See the [app documentation](kiosk_puck_bridge/DOCS.md) for troubleshooting and advanced options.
+The bridge uses the protocols implemented by both projects today. Both devices can occasionally answer if a wake claim or the winning verdict arrives after the other device’s arbitration window. If this recurs, try a 450–500 ms window on the affected Kiosk and check the bridge logs. Test both directions after an upgrade. See the [app documentation](kiosk_puck_bridge/DOCS.md) for troubleshooting and advanced options.
 
 ## Contributing
 

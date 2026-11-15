@@ -75,7 +75,7 @@ def parse_claim(claim):
 
 def registration(identity, capabilities):
     return json.dumps({"type": "register", "device_id": identity,
-                       "version": "KioskBridge-0.3.0", "board": "unknown",
+                       "version": "KioskBridge-0.3.1", "board": "unknown",
                        "base_os": "unknown", "capabilities": capabilities})
 
 

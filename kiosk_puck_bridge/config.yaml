@@ -1,5 +1,5 @@
-name: Kiosk Puck Bridge
-version: "0.3.0"
+name: KioskMuse Bridge
+version: "0.3.1"
 slug: kiosk_puck_bridge
 description: Coordinate wake word arbitration between EchoMuse pucks and Kiosk Satellites.
 url: https://github.com/vibribbonee/kiosk-puck-bridge

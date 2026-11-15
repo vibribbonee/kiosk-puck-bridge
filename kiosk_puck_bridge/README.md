@@ -1,4 +1,4 @@
-# Kiosk Puck Bridge
+# KioskMuse Bridge
 
 Let your EchoMuse pucks and Kiosk Satellites share a wake word. A single
 virtual puck represents all Kiosks on the LAN, and each physical device

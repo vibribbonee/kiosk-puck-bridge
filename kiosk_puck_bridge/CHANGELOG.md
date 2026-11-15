@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Rename the app to KioskMuse Bridge and clarify which ESPHome discoveries to ignore.
+
 ## 0.3.0
 
 - Discover Kiosk Satellites through their existing wake word arbitration.
